@@ -6,7 +6,7 @@ from django_filters.views import FilterView
 from core.filters import RecordFilter
 from core.forms import RecordForm
 from core.mixins import RedirectToRefererSuccessMixin
-from core.models import Bill, Record
+from core.models import Bill, Record, Transfer
 
 
 class HomeView(generic.TemplateView):
@@ -108,6 +108,20 @@ class RecordDeleteView(RedirectToRefererSuccessMixin, generic.DeleteView):
     model = Record
 
 
+class TransferListView(generic.ListView):
+    extra_context = {
+        'title': 'Transferências entre Contas'
+    }
+    template_name = 'core/transfer_list.html'
+    model = Transfer
+    ordering = ['-created_at']
+
+
+class TransferDeleteView(RedirectToRefererSuccessMixin, generic.DeleteView):
+    http_method_names = ['post']
+    model = Transfer
+
+
 home = HomeView.as_view()
 bill_list = BillListView.as_view()
 expense_list = ExpenseListView.as_view()
@@ -115,3 +129,5 @@ expense_create = ExpenseCreateView.as_view()
 income_list = IncomeListView.as_view()
 income_create = IncomeCreateView.as_view()
 record_delete = RecordDeleteView.as_view()
+transfer_list = TransferListView.as_view()
+transfer_delete = TransferDeleteView.as_view()

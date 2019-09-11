@@ -12,11 +12,15 @@ urlpatterns = [
         path('', views.expense_list, name='expense-list'),
         path('novo/', views.expense_create, name='expense-create'),
     ])),
-
     path('receitas/', include([
         path('', views.income_list, name='income-list'),
         path('novo/', views.income_create, name='income-create'),
     ])),
 
     path('<uuid:pk>/excluir/', views.record_delete, name='record-delete'),
+
+    path('transferencias/', include([
+        path('', views.transfer_list, name='transfer-list'),
+        path('<uuid:pk>/excluir/', views.transfer_delete, name='transfer-delete'),
+    ])),
 ]
