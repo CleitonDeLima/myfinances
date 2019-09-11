@@ -49,6 +49,10 @@
               </form>
             </td>
           </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6">Nenhum registro salvo.</td>
+          </tr>
         {% endfor %}
       </tbody>
       <tfoot>

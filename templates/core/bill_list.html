@@ -2,9 +2,9 @@
 
 {% block content %}
   <div class="row">
-    {% for object in object_list %}
-      <div class="col">
-        <div class="card" style="width: 18rem;">
+    <div class="col">
+      {% for object in object_list %}
+        <div class="card mb-2">
           <div class="card-body">
             <h5 class="card-title">{{ object.name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">R$ {{ object.balance }}</h6>
@@ -14,7 +14,10 @@
             </p>
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
+    <div class="col">
+
+    </div>
   </div>
 {% endblock %}

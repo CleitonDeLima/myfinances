@@ -17,6 +17,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Despesas</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Mês de {% now 'F' %}</h6>
           <p class="card-text text-danger">R$ {{ record_totals.value_out|floatformat:2 }}</p>
         </div>
       </div>
@@ -25,6 +26,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Receitas</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Mês de {% now 'F' %}</h6>
           <p class="card-text text-success">R$ {{ record_totals.value_in|floatformat:2 }}</p>
         </div>
       </div>
