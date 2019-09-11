@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total em Contas</h5>
+          <p class="card-text text-info">R$ {{ bill_totals.balance_total|floatformat:2 }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Despesas</h5>
+          <p class="card-text text-danger">R$ {{ record_totals.value_out|floatformat:2 }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Receitas</h5>
+          <p class="card-text text-success">R$ {{ record_totals.value_in|floatformat:2 }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

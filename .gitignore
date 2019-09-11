@@ -1,0 +1,17 @@
+# db
+*.sqlite3
+
+# env files
+.env
+
+# dirs
+/.venv
+/temp
+/logs
+
+# python
+__pycache__
+*.pyc
+
+# ides
+.idea

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    {% for object in object_list %}
+      <div class="col">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{ object.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">R$ {{ object.balance }}</h6>
+            <p class="card-text">
+              Despesas: {{ object.expense_count }} <br>
+              Receitas: {{ object.income_count }}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
