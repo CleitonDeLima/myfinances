@@ -13,8 +13,9 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
       <div class="container">
 
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
+        <a class="navbar-brand" href="#">MyFinances</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado"
+                aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -69,6 +70,8 @@
     </nav>
 
     <div class="container">
+      <h1>{{ title }}</h1>
+
       {% block content %}
       {% endblock %}
     </div>

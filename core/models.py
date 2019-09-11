@@ -30,8 +30,28 @@ class Record(AppModel):
                              related_name='records')
     observation = models.TextField(blank=True)
 
+    class Meta:
+        verbose_name = 'registro'
+        verbose_name_plural = 'registros'
+
     def __str__(self):
         return f'{self.get_type_display()} - {self.value}'
+
+    def save(self, *args, **kwargs):
+        if self.type == self.OUT:
+            self.bill.decrease_balance(self.value)
+        elif self.type == self.IN:
+            self.bill.add_balance(self.value)
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.type == Record.IN:
+            self.bill.decrease_balance(self.value)
+        else:
+            self.bill.add_balance(self.value)
+
+        return super().delete(*args, **kwargs)
 
 
 class Category(AppModel):
@@ -75,6 +95,14 @@ class Bill(AppModel):
 
     def __str__(self):
         return self.name
+
+    def add_balance(self, value):
+        self.balance += value
+        self.save()
+
+    def decrease_balance(self, value):
+        self.balance -= value
+        self.save()
 
 
 class Transfer(AppModel):

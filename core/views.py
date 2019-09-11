@@ -29,6 +29,9 @@ class HomeView(generic.TemplateView):
 
 
 class BillListView(generic.ListView):
+    extra_context = {
+        'title': 'Contas'
+    }
     template_name = 'core/bill_list.html'
     queryset = Bill.objects.annotate(
         expense_count=Count('records', filter=Q(records__type=Record.OUT)),
@@ -53,6 +56,9 @@ class RecordListView(FilterView):
 
 
 class ExpenseListView(RecordListView):
+    extra_context = {
+        'title': 'Despesas'
+    }
     queryset = Record.objects.filter(
         type=Record.OUT
     ).select_related('category', 'bill')
@@ -60,6 +66,9 @@ class ExpenseListView(RecordListView):
 
 
 class IncomeListView(RecordListView):
+    extra_context = {
+        'title': 'Receitas'
+    }
     queryset = Record.objects.filter(
         type=Record.IN
     ).select_related('category', 'bill')
@@ -67,6 +76,9 @@ class IncomeListView(RecordListView):
 
 
 class ExpenseCreateView(generic.CreateView):
+    extra_context = {
+        'title': 'Nova Despesa'
+    }
     template_name = 'core/record_form.html'
     model = Record
     form_class = RecordForm
@@ -78,6 +90,9 @@ class ExpenseCreateView(generic.CreateView):
 
 
 class IncomeCreateView(generic.CreateView):
+    extra_context = {
+        'title': 'Nova Receita'
+    }
     template_name = 'core/record_form.html'
     model = Record
     form_class = RecordForm
