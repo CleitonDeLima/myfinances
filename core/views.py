@@ -6,7 +6,7 @@ from django_filters.views import FilterView
 from core.filters import RecordFilter
 from core.forms import RecordForm
 from core.mixins import RedirectToRefererSuccessMixin
-from core.models import Bill, Record, Transfer
+from core.models import Bill, Record
 
 
 class HomeView(generic.TemplateView):
@@ -17,12 +17,12 @@ class HomeView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['record_totals'] = Record.objects.aggregate(
-            value_in=Sum('value', filter=Q(type=Record.IN)),
-            value_out=Sum('value', filter=Q(type=Record.OUT)),
-        )
-        context['bill_totals'] = Bill.objects.aggregate(
-            balance_total=Sum('balance')
+        value_in = Sum('value', filter=Q(type=Record.IN))
+        value_out = Sum('value', filter=Q(type=Record.OUT))
+        context['totals'] = Record.objects.aggregate(
+            value_in=value_in,
+            value_out=value_out,
+            balance=value_in - value_out
         )
 
         return context
@@ -36,6 +36,10 @@ class BillListView(generic.ListView):
     queryset = Bill.objects.annotate(
         expense_count=Count('records', filter=Q(records__type=Record.OUT)),
         income_count=Count('records', filter=Q(records__type=Record.IN)),
+        balance=(
+            Sum('records__value', filter=Q(records__type=Record.IN)) -
+            Sum('records__value', filter=Q(records__type=Record.OUT))
+        )
     )
 
 
@@ -108,20 +112,6 @@ class RecordDeleteView(RedirectToRefererSuccessMixin, generic.DeleteView):
     model = Record
 
 
-class TransferListView(generic.ListView):
-    extra_context = {
-        'title': 'Transferências entre Contas'
-    }
-    template_name = 'core/transfer_list.html'
-    model = Transfer
-    ordering = ['-created_at']
-
-
-class TransferDeleteView(RedirectToRefererSuccessMixin, generic.DeleteView):
-    http_method_names = ['post']
-    model = Transfer
-
-
 home = HomeView.as_view()
 bill_list = BillListView.as_view()
 expense_list = ExpenseListView.as_view()
@@ -129,5 +119,3 @@ expense_create = ExpenseCreateView.as_view()
 income_list = IncomeListView.as_view()
 income_create = IncomeCreateView.as_view()
 record_delete = RecordDeleteView.as_view()
-transfer_list = TransferListView.as_view()
-transfer_delete = TransferDeleteView.as_view()

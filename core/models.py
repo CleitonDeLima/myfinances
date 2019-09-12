@@ -37,22 +37,6 @@ class Record(AppModel):
     def __str__(self):
         return f'{self.get_type_display()} - {self.value}'
 
-    def save(self, *args, **kwargs):
-        if self.type == self.OUT:
-            self.bill.decrease_balance(self.value)
-        elif self.type == self.IN:
-            self.bill.add_balance(self.value)
-
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        if self.type == Record.IN:
-            self.bill.decrease_balance(self.value)
-        else:
-            self.bill.add_balance(self.value)
-
-        return super().delete(*args, **kwargs)
-
 
 class Category(AppModel):
     IN = '1'
@@ -86,7 +70,6 @@ class Bill(AppModel):
         (OTHERS, 'Outros'),
     ]
     name = models.CharField(max_length=30)
-    balance = models.DecimalField(max_digits=15, decimal_places=2)
     type = models.CharField(choices=TYPES, max_length=2)
 
     class Meta:
@@ -95,40 +78,3 @@ class Bill(AppModel):
 
     def __str__(self):
         return self.name
-
-    def add_balance(self, value):
-        self.balance += value
-        self.save()
-
-    def decrease_balance(self, value):
-        self.balance -= value
-        self.save()
-
-
-class Transfer(AppModel):
-    sender = models.ForeignKey('core.Bill', on_delete=models.CASCADE,
-                               related_name='sender_transfers')
-    receiver = models.ForeignKey('core.Bill', on_delete=models.CASCADE,
-                                 related_name='receiver_transfers')
-    value = models.DecimalField(max_digits=15, decimal_places=2)
-
-    class Meta:
-        verbose_name = 'transferência'
-        verbose_name_plural = 'transferências'
-
-    def __str__(self):
-        return str(self.value)
-
-    def save(self, *args, **kwargs):
-        # atualiza valores em conta
-        self.sender.decrease_balance(self.value)
-        self.receiver.add_balance(self.value)
-
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        # atualiza valores em conta antes de excluir
-        self.sender.add_balance(self.value)
-        self.receiver.decrease_balance(self.value)
-
-        super().delete(*args, **kwargs)

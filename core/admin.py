@@ -5,12 +5,7 @@ from core import models
 
 @admin.register(models.Bill)
 class BillAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(models.Transfer)
-class TransferAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name', 'type']
 
 
 @admin.register(models.Record)

@@ -18,9 +18,4 @@ urlpatterns = [
     ])),
 
     path('<uuid:pk>/excluir/', views.record_delete, name='record-delete'),
-
-    path('transferencias/', include([
-        path('', views.transfer_list, name='transfer-list'),
-        path('<uuid:pk>/excluir/', views.transfer_delete, name='transfer-delete'),
-    ])),
 ]
