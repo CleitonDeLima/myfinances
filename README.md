@@ -18,6 +18,7 @@ source .venv/bin/activate
 SECRET_KEY=IS_SECRET
 DEBUG=True
 ALLOWED_HOSTS=*
+DATABASE_URL=sqlite3:///db.sqlite3
 ```
 
 4. Instale as dependencias:
