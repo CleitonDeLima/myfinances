@@ -4,6 +4,8 @@ from colorfield.fields import ColorField
 from django.db import models
 from django.utils import timezone
 
+from core.managers import BillQuerySet
+
 
 class AppModel(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
@@ -71,6 +73,8 @@ class Bill(AppModel):
     ]
     name = models.CharField(max_length=30)
     type = models.CharField(choices=TYPES, max_length=2)
+
+    objects = BillQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'conta'

@@ -1,4 +1,3 @@
-from django.db.models import Count, Sum, Q
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -38,16 +37,7 @@ class BillViewSet(mixins.CreateModelMixin,
 
     @action(detail=False)
     def balance(self, request, pk=None):
-        queryset = self.get_queryset()
-        queryset = queryset.annotate(
-            expense_count=Count('records', filter=Q(records__type=Record.OUT)),
-            income_count=Count('records', filter=Q(records__type=Record.IN)),
-            balance=(
-                    Sum('records__value', filter=Q(records__type=Record.IN)) -
-                    Sum('records__value', filter=Q(records__type=Record.OUT))
-            )
-        )
-
+        queryset = self.get_queryset().balance()
         data = [
             dict(
                 id=b.id,
