@@ -19,6 +19,7 @@ SECRET_KEY=IS_SECRET
 DEBUG=True
 ALLOWED_HOSTS=*
 DATABASE_URL=sqlite3:///db.sqlite3
+IS_SECURE=False
 ```
 
 4. Instale as dependencias:
