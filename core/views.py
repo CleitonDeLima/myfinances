@@ -44,6 +44,11 @@ class ExpenseCreateView(generic.CreateView):
     queryset = Record.objects.filter(type=Record.OUT)
     success_url = reverse_lazy('expense-list')
 
+    def form_valid(self, form):
+        form.instance.type = Record.OUT
+
+        return super().form_valid(form)
+
 
 class ExpenseUpdateView(generic.UpdateView):
     extra_context = {'header_title': 'Editar Despesa'}
@@ -74,6 +79,11 @@ class IncomeCreateView(generic.CreateView):
     form_class = RecordForm
     queryset = Record.objects.filter(type=Record.IN)
     success_url = reverse_lazy('income-list')
+
+    def form_valid(self, form):
+        form.instance.type = Record.IN
+
+        return super().form_valid(form)
 
 
 class IncomeUpdateView(generic.UpdateView):
