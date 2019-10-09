@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block menus %}
+  <a href="{% url 'bill-create' %}" class="btn">
+    <i class="fas fa-plus"></i> Nova conta
+  </a>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% for object in object_list %}
+      <div class="col-sm-6 col-md-4">
+        <div class="card">
+          <div class="card-header">
+            {{ object.name }}
+            <span class="badge badge-pill badge-success float-right">{{ object.income_count }} receitas</span>
+            <span class="badge badge-pill badge-danger float-right">{{ object.expense_count }} despesas</span>
+          </div>
+          <div class="card-body">
+            <p>Saldo de R$ {{ object.balance }}</p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'bill-update' object.id %}">Editar</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,52 +1,107 @@
-from rest_framework import viewsets, mixins
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from django.urls import reverse_lazy
+from django.views import generic
 
-from core.models import Record, Category, Bill
-from core.serializers import (
-    ExpenseSerializer, IncomeSerializer, CategorySerializer, BillSerializer
-)
+from core.forms import RecordForm
+from core.models import Record, Bill
 
 
-class ExpenseViewSet(viewsets.ModelViewSet):
-    serializer_class = ExpenseSerializer
-    queryset = Record.objects.filter(type=Record.OUT).order_by('-created_at')
+class HomeView(generic.TemplateView):
+    template_name = 'home.html'
 
 
-class IncomeViewSet(viewsets.ModelViewSet):
-    serializer_class = IncomeSerializer
-    queryset = Record.objects.filter(type=Record.IN).order_by('-created_at')
+class BillListView(generic.ListView):
+    template_name = 'bill_list.html'
+    queryset = Bill.objects.balance()
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
-                      mixins.UpdateModelMixin,
-                      mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
-    serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+class BillCreateView(generic.CreateView):
+    template_name = 'bill_form.html'
+    fields = ['name', 'type', 'tags']
+    model = Bill
+    success_url = reverse_lazy('bill-list')
 
 
-class BillViewSet(mixins.CreateModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,
-                  viewsets.GenericViewSet):
-    serializer_class = BillSerializer
-    queryset = Bill.objects.all()
+class BillUpdateView(generic.UpdateView):
+    template_name = 'bill_form.html'
+    fields = ['name', 'type', 'tags']
+    model = Bill
+    success_url = reverse_lazy('bill-list')
 
-    @action(detail=False)
-    def balance(self, request, pk=None):
-        queryset = self.get_queryset().balance()
-        data = [
-            dict(
-                id=b.id,
-                name=b.name,
-                expense_count=b.expense_count,
-                income_count=b.income_count,
-                balance=b.balance
-            )
-            for b in queryset
-        ]
 
-        return Response(data)
+class ExpenseListView(generic.ListView):
+    extra_context = {'class_label': 'danger'}
+    template_name = 'record_list.html'
+    queryset = Record.objects.filter(
+        type=Record.OUT
+    ).prefetch_related('tags', 'bill')
+    ordering = ['-date']
+
+
+class ExpenseCreateView(generic.CreateView):
+    extra_context = {'header_title': 'Criar Despesa'}
+    template_name = 'record_form.html'
+    form_class = RecordForm
+    queryset = Record.objects.filter(type=Record.OUT)
+    success_url = reverse_lazy('expense-list')
+
+
+class ExpenseUpdateView(generic.UpdateView):
+    extra_context = {'header_title': 'Editar Despesa'}
+    template_name = 'record_form.html'
+    form_class = RecordForm
+    queryset = Record.objects.filter(type=Record.OUT)
+    success_url = reverse_lazy('expense-list')
+
+
+class ExpenseDeleteView(generic.DeleteView):
+    http_method_names = ['post']
+    queryset = Record.objects.filter(type=Record.OUT)
+    success_url = reverse_lazy('expense-list')
+
+
+class IncomeListView(generic.ListView):
+    extra_context = {'class_label': 'success'}
+    template_name = 'record_list.html'
+    queryset = Record.objects.filter(
+        type=Record.IN
+    ).prefetch_related('tags', 'bill')
+    ordering = ['-date']
+
+
+class IncomeCreateView(generic.CreateView):
+    extra_context = {'header_title': 'Criar Receita'}
+    template_name = 'record_form.html'
+    form_class = RecordForm
+    queryset = Record.objects.filter(type=Record.IN)
+    success_url = reverse_lazy('income-list')
+
+
+class IncomeUpdateView(generic.UpdateView):
+    extra_context = {'header_title': 'Editar Receita'}
+    template_name = 'record_form.html'
+    form_class = RecordForm
+    queryset = Record.objects.filter(type=Record.IN)
+    success_url = reverse_lazy('income-list')
+
+
+class IncomeDeleteView(generic.DeleteView):
+    http_method_names = ['post']
+    queryset = Record.objects.filter(type=Record.IN)
+    success_url = reverse_lazy('income-list')
+
+
+home = HomeView.as_view()
+
+bill_list = BillListView.as_view()
+bill_create = BillCreateView.as_view()
+bill_update = BillUpdateView.as_view()
+
+expense_list = ExpenseListView.as_view()
+expense_create = ExpenseCreateView.as_view()
+expense_update = ExpenseUpdateView.as_view()
+expense_delete = ExpenseDeleteView.as_view()
+
+income_list = IncomeListView.as_view()
+income_create = IncomeCreateView.as_view()
+income_update = IncomeUpdateView.as_view()
+income_delete = IncomeDeleteView.as_view()

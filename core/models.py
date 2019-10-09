@@ -2,7 +2,12 @@ import uuid
 
 from colorfield.fields import ColorField
 from django.db import models
+from django.shortcuts import resolve_url
 from django.utils import timezone
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
+from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
 from core.managers import BillQuerySet
 
@@ -14,6 +19,12 @@ class AppModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
 
 
 class Record(AppModel):
@@ -31,6 +42,7 @@ class Record(AppModel):
     bill = models.ForeignKey('core.Bill', on_delete=models.CASCADE,
                              related_name='records')
     observation = models.TextField(blank=True)
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     class Meta:
         verbose_name = 'registro'
@@ -38,6 +50,22 @@ class Record(AppModel):
 
     def __str__(self):
         return f'{self.get_type_display()} - {self.value}'
+
+    @cached_property
+    def tag_list(self):
+        return list(self.tags.all())
+
+    def get_update_url(self):
+        if self.type == self.IN:
+            return resolve_url('income-update', self.id)
+
+        return resolve_url('expense-update', self.id)
+
+    def get_delete_url(self):
+        if self.type == self.IN:
+            return resolve_url('income-delete', self.id)
+
+        return resolve_url('expense-delete', self.id)
 
 
 class Category(AppModel):
@@ -73,6 +101,7 @@ class Bill(AppModel):
     ]
     name = models.CharField(max_length=30)
     type = models.CharField(choices=TYPES, max_length=2)
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     objects = BillQuerySet.as_manager()
 
@@ -82,3 +111,7 @@ class Bill(AppModel):
 
     def __str__(self):
         return self.name
+
+    @cached_property
+    def tag_list(self):
+        return list(self.tags.all())

@@ -41,11 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'rest_framework',
     'corsheaders',
     'debug_toolbar',
     'django_filters',
     'colorfield',
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'taggit',
 
     'core',
 ]
@@ -60,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'login_required.middleware.LoginRequiredMiddleware',
 ]
 
 INTERNAL_IPS = [
@@ -71,7 +74,9 @@ ROOT_URLCONF = 'myfinances.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,6 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -135,15 +142,17 @@ USE_THOUSAND_SEPARATOR = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'assets')
+]
+STATICFILES_STORAGE = (
+    'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 CORS_ORIGIN_ALLOW_ALL = DEBUG
-
-REST_FRAMEWORK = {
-    'DATE_INPUT_FORMATS': ['iso-8601', '%d/%m/%Y']
-}
 
 if config('IS_SECURE', cast=bool, default=True):
     X_FRAME_OPTIONS = 'DENY'
@@ -156,3 +165,9 @@ if config('IS_SECURE', cast=bool, default=True):
     SECURE_HSTS_SECONDS = 3600
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+
+LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [
+    'login',
+    'logout',
+]

@@ -7,15 +7,18 @@ psycopg2-binary==2.8.3
 
 # django
 pytz
-Django==2.2.5
-djangorestframework==3.10.3
+Django==2.2.6
 django-cors-headers==3.1.0
 django-extensions==2.2.1
 django-filter==2.2.0
 django-colorfield==0.1.15
+django-bootstrap4==1.0.1
+django-bootstrap-datepicker-plus==3.0.5
+django-taggit==1.1.0
 python-decouple==3.1
 dj-database-url==0.5.0
 dj-static==0.0.6
+django-login-required-middleware==0.3
 
 # debug
 django-debug-toolbar==2.0
