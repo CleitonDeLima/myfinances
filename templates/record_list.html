@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block menus %}
+  <a href="{% url 'expense-create' %}" class="btn">Nova despesa</a>
+  <a href="{% url 'income-create' %}" class="btn">Nova receita</a>
+{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">Despesas</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-responsive-sm table-bordered table-striped table-sm">
+          <thead>
+          <tr>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Descrição</th>
+            <th>Conta</th>
+            <th>Tags</th>
+            <th>Ações</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for object in object_list %}
+            <tr>
+              <td>{{ object.date|date:"d/m/Y" }}</td>
+              <td><span class="badge badge-{{ class_label }}">R$ {{ object.value }}</span></td>
+              <td>{{ object.description }}</td>
+              <td>{{ object.bill }}</td>
+              <td>
+                {% for tag in object.tag_list %}
+                  <span class="badge badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+              </td>
+              <td>
+                <div class="input-group">
+                  <a href="{{ object.get_update_url }}" class="btn btn-info btn-sm">Editar</a>
+                  <form action="{{ object.get_delete_url }}" method="post"
+                        onclick="return confirm('Deseja realmente excluir este registro?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

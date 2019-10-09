@@ -1,0 +1,24 @@
+{
+  "dokku": {
+    "plugins": [
+      "postgres"
+    ],
+    "volumes": [
+      {
+        "host": "/var/lib/dokku/data/storage/$APP/mediafiles",
+        "app": "/app/mediafiles",
+        "phases": "deploy,run"
+      },
+      {
+        "host": "/var/lib/dokku/data/storage/$APP/staticfiles",
+        "app": "/app/staticfiles",
+        "phases": "deploy,run"
+      }
+    ]
+  },
+  "scripts": {
+    "dokku": {
+      "predeploy": "python manage.py collectstatic --clear --noinput && python manage.py migrate --noinput"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="MyFinances">
+    <meta name="author" content="Cleiton Lima">
+    <meta name="keyword" content="finances,bill,incomes,expenses">
+    <link rel="icon" href="{% static 'favicon.ico' %}" />
+    <title>MyFinances</title>
+    <!-- Icons-->
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.js"></script>
+
+    <!-- Main styles for this application-->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/pace-progress/css/pace.min.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">MyFinances</a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none mr-auto" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <ul class="nav navbar-nav d-md-down-none">
+        {% if not user.is_authenticated %}
+          <li class="nav-item px-3">
+            <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+          </li>
+        {% else %}
+          <li class="nav-item px-3">
+            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+          </li>
+        {% endif %}
+      </ul>
+    </header>
+    <div class="app-body">
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">
+                <i class="fas fa-home"></i> Home
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="nav-title">Registros</li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'bill-list' %}">
+                <i class="fas fa-wallet"></i> Contas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'income-list' %}">
+                <i class="fas fa-dollar-sign"></i> Receitas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'expense-list' %}">
+                <i class="fas fa-dollar-sign"></i> Despesas
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+      </div>
+      <main class="main">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-menu">
+            <div class="btn-group" role="group" aria-label="Button group">
+              {% block menus %}{% endblock %}
+            </div>
+          </li>
+        </ol>
+        <div class="container-fluid">
+          <div class="animated fadeIn">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer class="app-footer">
+      <div>
+        <a href="#">Cleiton Lima</a>
+        <span>&copy; {% now 'Y' %}.</span>
+      </div>
+      <div class="ml-auto">
+        <span>Powered by</span>
+        <a href="#">Cleiton Lima</a>
+      </div>
+    </footer>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script type="application/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.4.0/perfect-scrollbar.min.js"></script>
+    <script type="application/javascript" src="{% static 'vendors/coreui/coreui.min.js' %}"></script>
+    {% block javascript %}{% endblock %}
+  </body>
+</html>

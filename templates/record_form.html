@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+  <div class="card">
+    <h4 class="card-header">{{ header_title }}</h4>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block css %}
+  {{ form.media.css }}
+{% endblock %}
+
+{% block javascript %}
+  {{ form.media.js }}
+{% endblock %}

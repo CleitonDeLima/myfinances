@@ -10,8 +10,9 @@ class BillAdmin(admin.ModelAdmin):
 
 @admin.register(models.Record)
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ['type', 'value', 'date', 'category', 'bill']
+    list_display = ['type', 'value', 'date', 'category', 'bill', 'tag_list']
     list_filter = ['type', 'category', 'bill']
+    ordering = ['-date']
 
 
 @admin.register(models.Category)
