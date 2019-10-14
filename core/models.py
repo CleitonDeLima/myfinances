@@ -1,6 +1,5 @@
 import uuid
 
-from colorfield.fields import ColorField
 from django.db import models
 from django.shortcuts import resolve_url
 from django.utils import timezone
@@ -38,10 +37,8 @@ class Record(AppModel):
     value = models.DecimalField(max_digits=15, decimal_places=2)
     date = models.DateField(default=timezone.now)
     description = models.TextField(blank=True)
-    category = models.ForeignKey('core.Category', on_delete=models.CASCADE)
     bill = models.ForeignKey('core.Bill', on_delete=models.CASCADE,
                              related_name='records')
-    observation = models.TextField(blank=True)
     tags = TaggableManager(through=UUIDTaggedItem)
 
     class Meta:
@@ -66,25 +63,6 @@ class Record(AppModel):
             return resolve_url('income-delete', self.id)
 
         return resolve_url('expense-delete', self.id)
-
-
-class Category(AppModel):
-    IN = '1'
-    OUT = '2'
-    TYPES = [
-        (IN, 'Entrada'),
-        (OUT, 'Saída'),
-    ]
-    type = models.CharField(choices=TYPES, max_length=1)
-    name = models.CharField(max_length=30)
-    color = ColorField(default='#FF0000')
-
-    class Meta:
-        verbose_name = 'categoria'
-        verbose_name_plural = 'categorias'
-
-    def __str__(self):
-        return f'{self.name} - {self.get_type_display()}'
 
 
 class Bill(AppModel):

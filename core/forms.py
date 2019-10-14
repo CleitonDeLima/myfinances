@@ -8,11 +8,9 @@ class RecordForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = [
-            'value', 'date', 'description', 'category', 'bill', 'observation',
-            'tags'
+            'value', 'date', 'description', 'bill', 'tags'
         ]
         widgets = {
             'date': DatePickerInput(format='%d/%m/%Y'),
             'description': forms.Textarea(attrs={'rows': 2}),
-            'observation': forms.Textarea(attrs={'rows': 2}),
         }
