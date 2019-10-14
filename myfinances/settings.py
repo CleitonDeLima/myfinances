@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'debug_toolbar',
     'django_filters',
-    'colorfield',
     'bootstrap4',
     'bootstrap_datepicker_plus',
     'taggit',
