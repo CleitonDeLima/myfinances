@@ -35,7 +35,16 @@
   </div>
 
   <div class="card">
-    <div class="card-header">Despesas</div>
+    <div class="card-header">Totais</div>
+    <div class="card-body">
+      <div class="callout callout-{{ class_label }}">
+        <strong class="h4">R$ {{ object_list.totals.value }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">{{ header_title }}</div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-responsive-sm table-bordered table-striped table-sm">

@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
-from core.managers import BillQuerySet
+from core.managers import BillQuerySet, RecordQuerySet
 
 
 class AppModel(models.Model):
@@ -40,6 +40,8 @@ class Record(AppModel):
     bill = models.ForeignKey('core.Bill', on_delete=models.CASCADE,
                              related_name='records')
     tags = TaggableManager(through=UUIDTaggedItem)
+
+    objects = RecordQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'registro'

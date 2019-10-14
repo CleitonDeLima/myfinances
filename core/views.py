@@ -38,17 +38,20 @@ class BillUpdateView(generic.UpdateView):
 
 
 class ExpenseListView(RecordFilterView):
-    extra_context = {'class_label': 'danger'}
-    queryset = Record.objects.filter(
-        type=Record.OUT
-    ).prefetch_related('tags', 'bill')
+    extra_context = {
+        'class_label': 'danger',
+        'header_title': 'Despesas'
+    }
+    queryset = (
+        Record.objects.expenses().prefetch_related('tags', 'bill')
+    )
 
 
 class ExpenseCreateView(generic.CreateView):
     extra_context = {'header_title': 'Criar Despesa'}
     template_name = 'record_form.html'
     form_class = RecordForm
-    queryset = Record.objects.filter(type=Record.OUT)
+    queryset = Record.objects.expenses()
     success_url = reverse_lazy('expense-list')
 
     def form_valid(self, form):
@@ -61,28 +64,31 @@ class ExpenseUpdateView(generic.UpdateView):
     extra_context = {'header_title': 'Editar Despesa'}
     template_name = 'record_form.html'
     form_class = RecordForm
-    queryset = Record.objects.filter(type=Record.OUT)
+    queryset = Record.objects.expenses()
     success_url = reverse_lazy('expense-list')
 
 
 class ExpenseDeleteView(generic.DeleteView):
     http_method_names = ['post']
-    queryset = Record.objects.filter(type=Record.OUT)
+    queryset = Record.objects.expenses()
     success_url = reverse_lazy('expense-list')
 
 
 class IncomeListView(RecordFilterView):
-    extra_context = {'class_label': 'success'}
-    queryset = Record.objects.filter(
-        type=Record.IN
-    ).prefetch_related('tags', 'bill')
+    extra_context = {
+        'class_label': 'success',
+        'header_title': 'Receitas'
+    }
+    queryset = (
+        Record.objects.incomes().prefetch_related('tags', 'bill')
+    )
 
 
 class IncomeCreateView(generic.CreateView):
     extra_context = {'header_title': 'Criar Receita'}
     template_name = 'record_form.html'
     form_class = RecordForm
-    queryset = Record.objects.filter(type=Record.IN)
+    queryset = Record.objects.incomes()
     success_url = reverse_lazy('income-list')
 
     def form_valid(self, form):
@@ -95,13 +101,13 @@ class IncomeUpdateView(generic.UpdateView):
     extra_context = {'header_title': 'Editar Receita'}
     template_name = 'record_form.html'
     form_class = RecordForm
-    queryset = Record.objects.filter(type=Record.IN)
+    queryset = Record.objects.incomes()
     success_url = reverse_lazy('income-list')
 
 
 class IncomeDeleteView(generic.DeleteView):
     http_method_names = ['post']
-    queryset = Record.objects.filter(type=Record.IN)
+    queryset = Record.objects.incomes()
     success_url = reverse_lazy('income-list')
 
 

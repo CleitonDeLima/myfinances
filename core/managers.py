@@ -23,3 +23,15 @@ class BillQuerySet(QuerySet):
             income_count=count_in,
             balance=sum_in - sum_out
         )
+
+
+class RecordQuerySet(QuerySet):
+
+    def incomes(self):
+        return self.filter(type=self.model.IN)
+
+    def expenses(self):
+        return self.filter(type=self.model.OUT)
+
+    def totals(self):
+        return self.aggregate(value=Sum('value'))
