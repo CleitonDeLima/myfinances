@@ -1,8 +1,17 @@
 from django.urls import reverse_lazy
 from django.views import generic
+from django_filters.views import FilterView
 
+from core.filters import RecordFilter
 from core.forms import RecordForm
 from core.models import Record, Bill
+
+
+class RecordFilterView(FilterView):
+    template_name = 'record_list.html'
+    ordering = ['-date', '-created_at']
+    filterset_class = RecordFilter
+    paginate_by = 30
 
 
 class HomeView(generic.TemplateView):
@@ -28,13 +37,11 @@ class BillUpdateView(generic.UpdateView):
     success_url = reverse_lazy('bill-list')
 
 
-class ExpenseListView(generic.ListView):
+class ExpenseListView(RecordFilterView):
     extra_context = {'class_label': 'danger'}
-    template_name = 'record_list.html'
     queryset = Record.objects.filter(
         type=Record.OUT
     ).prefetch_related('tags', 'bill')
-    ordering = ['-date']
 
 
 class ExpenseCreateView(generic.CreateView):
@@ -64,13 +71,11 @@ class ExpenseDeleteView(generic.DeleteView):
     success_url = reverse_lazy('expense-list')
 
 
-class IncomeListView(generic.ListView):
+class IncomeListView(RecordFilterView):
     extra_context = {'class_label': 'success'}
-    template_name = 'record_list.html'
     queryset = Record.objects.filter(
         type=Record.IN
     ).prefetch_related('tags', 'bill')
-    ordering = ['-date']
 
 
 class IncomeCreateView(generic.CreateView):

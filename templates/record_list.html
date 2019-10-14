@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 
 {% block menus %}
   <a href="{% url 'expense-create' %}" class="btn">Nova despesa</a>
@@ -6,6 +7,33 @@
 {% endblock %}
 
 {% block content %}
+  <div class="card">
+    <div class="card-header">Filtros</div>
+    <div class="card-body">
+      <form action="" method="get">
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                {% bootstrap_field filter.form.start_date %}
+              </div>
+              <div class="col">
+                {% bootstrap_field filter.form.end_date %}
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            {% bootstrap_field filter.form.bill %}
+          </div>
+          <div class="col">
+            {% bootstrap_field filter.form.tags %}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-info">Filtrar</button>
+      </form>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-header">Despesas</div>
     <div class="card-body">
@@ -48,6 +76,17 @@
           </tbody>
         </table>
       </div>
+      {% if is_paginated %}
+        {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
+      {% endif %}
     </div>
   </div>
+{% endblock %}
+
+{% block css %}
+  {{ filter.form.media.css }}
+{% endblock %}
+
+{% block javascript %}
+  {{ filter.form.media.js }}
 {% endblock %}

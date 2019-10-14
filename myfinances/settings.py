@@ -171,3 +171,7 @@ LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [
     'login',
     'logout',
 ]
+
+BOOTSTRAP4 = {
+    'success_css_class': ''
+}
